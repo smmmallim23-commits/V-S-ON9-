@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vision9</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--c:#00f5ff;--p:#b400ff;--d:#04080f;--card:#0d1825;--b:rgba(0,245,255,0.12)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:var(--d);color:#e8f0ff;font-family:'Inter',sans-serif;overscroll-behavior:none}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,245,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;z-index:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.screen.active{display:flex}
+#landing{align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px}
+.logo{font-family:'Orbitron',monospace;font-size:clamp(52px,15vw,96px);font-weight:900;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;animation:glow 4s ease-in-out infinite}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 16px rgba(0,245,255,0.4))}50%{filter:drop-shadow(0 0 40px rgba(180,0,255,0.6))}}
+.tag{font-size:11px;color:var(--c);letter-spacing:4px;text-transform:uppercase;opacity:.7;margin:10px 0 32px}
+.hero{font-size:clamp(14px,4vw,18px);color:rgba(232,240,255,0.6);line-height:1.9;margin-bottom:48px;max-width:420px}
+.hero b{color:#fff}.hero em{color:var(--c);font-style:normal;font-weight:600}
+.btn-main{display:block;width:100%;max-width:320px;margin:0 auto 12px;background:linear-gradient(135deg,var(--c),var(--p));border:none;border-radius:14px;color:#000;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;padding:18px 32px;letter-spacing:2px;cursor:pointer;box-shadow:0 8px 32px rgba(0,245,255,0.3);transition:transform .15s}
+.btn-main:active{transform:scale(.97)}
+.btn-out{display:block;width:100%;max-width:320px;margin:0 auto 40px;background:rgba(0,245,255,0.06);border:1px solid var(--b);border-radius:14px;color:var(--c);font-size:14px;padding:16px 32px;cursor:pointer}
+.btn-out:active{background:rgba(0,245,255,0.12)}
+.stats{display:flex;border:1px solid var(--b);border-radius:16px;overflow:hidden;background:rgba(0,245,255,0.03)}
+.stat{flex:1;padding:16px 8px;text-align:center;border-right:1px solid var(--b)}.stat:last-child{border-right:none}
+.sn{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;color:var(--c)}
+.sl{font-size:10px;color:rgba(232,240,255,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
+#auth{align-items:center;justify-content:center;padding:40px 24px}
+.card{background:rgba(13,24,37,0.95);border:1px solid var(--b);border-radius:24px;padding:36px 28px;width:100%;max-width:400px}
+.card-title{font-family:'Orbitron',monospace;font-size:18px;color:var(--c);text-align:center;margin-bottom:28px;letter-spacing:2px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;color:rgba(232,240,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.field input{width:100%;background:rgba(0,245,255,0.04);border:1px solid var(--b);border-radius:10px;padding:14px 16px;color:#e8f0ff;font-family:'Inter',sans-serif;font-size:16px;outline:none}
+.field input:focus{border-color:rgba(0,245,255,0.5)}
+.sw{text-align:center;margin-top:20px;font-size:13px;color:rgba(232,240,255,0.4)}.sw a{color:var(--c);cursor:pointer}
+.back-link{display:block;text-align:center;margin-top:16px;font-size:13px;color:rgba(232,240,255,0.4);cursor:pointer}
+#dashboard{padding:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 16px;background:rgba(4,8,15,0.97);border-bottom:1px solid var(--b);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-shrink:0}
+.topbar-logo{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-name{font-size:13px;color:rgba(232,240,255,0.5)}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--p));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:#000;cursor:pointer}
+.dbody{padding:20px 20px 100px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sec{font-family:'Orbitron',monospace;font-size:11px;color:var(--c);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec::after{content:'';flex:1;height:1px;background:var(--b)}
+.new-btn{background:linear-gradient(135deg,rgba(0,245,255,0.07),rgba(180,0,255,0.07));border:1px solid rgba(0,245,255,0.25);border-radius:20px;padding:28px 24px;text-align:center;cursor:pointer;margin-bottom:28px;display:block;width:100%}
+.new-btn:active{transform:scale(.98)}
+.new-icon{font-size:40px;margin-bottom:10px}
+.new-label{font-family:'Orbitron',monospace;font-size:13px;color:var(--c);letter-spacing:2px}
+.wgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.wcard{background:var(--card);border:1px solid var(--b);border-radius:16px;overflow:hidden;cursor:pointer;position:relative}
+.wcard:active{transform:scale(.97)}
+.wthumb{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.wbadge{position:absolute;top:8px;right:8px;background:rgba(0,245,255,0.2);backdrop-filter:blur(8px);border:1px solid rgba(0,245,255,0.4);border-radius:6px;padding:3px 7px;font-size:9px;color:var(--c);font-family:'Orbitron',monospace}
+.winfo{padding:10px 12px}
+.wname{font-size:12px;font-weight:600;color:#e8f0ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.wdate{font-size:10px;color:rgba(232,240,255,0.35)}
+.empty{grid-column:1/-1;text-align:center;padding:48px 20px;color:rgba(232,240,255,0.25)}
+#create{padding:0}
+.create-top{display:flex;align-items:center;gap:14px;padding:52px 20px 16px;background:rgba(4,8,15,0.97);border-bottom:1px solid var(--b);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-shrink:0}
+.back{background:rgba(0,245,255,0.08);border:1px solid var(--b);border-radius:10px;color:var(--c);padding:8px 14px;cursor:pointer;font-size:15px}
+.step-label{font-family:'Orbitron',monospace;font-size:11px;color:var(--c);letter-spacing:2px}
+.cbody{padding:24px 20px 100px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.progress{display:flex;gap:6px;margin-bottom:28px}
+.prog{flex:1;height:3px;background:var(--b);border-radius:2px;transition:background .3s}
+.prog.a{background:var(--c);box-shadow:0 0 8px var(--c)}.prog.d{background:var(--p)}
+.upload-zone{border:1.5px dashed rgba(0,245,255,0.2);border-radius:20px;padding:48px 20px;text-align:center;cursor:pointer;margin-bottom:16px;position:relative;overflow:hidden;background:rgba(0,245,255,0.02)}
+.upload-zone:active{border-color:var(--c)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uz-icon{font-size:48px;margin-bottom:16px}
+.uz-title{font-family:'Orbitron',monospace;font-size:13px;color:var(--c);margin-bottom:8px;letter-spacing:2px}
+.uz-sub{font-size:13px;color:rgba(232,240,255,0.35);line-height:1.6}
+.prev-grid{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.prev-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid rgba(0,245,255,0.3)}
+.img-count{font-family:'Orbitron',monospace;font-size:11px;color:var(--c);text-align:center;margin-bottom:14px;letter-spacing:3px;display:none}
+.text-input{width:100%;background:rgba(0,245,255,0.04);border:1px solid var(--b);border-radius:12px;padding:14px 16px;color:#e8f0ff;font-family:'Inter',sans-serif;font-size:16px;outline:none;margin-bottom:14px}
+.text-input:focus{border-color:rgba(0,245,255,0.5)}
+.asset-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.asset-box{border:1.5px dashed rgba(0,245,255,0.15);border-radius:16px;padding:24px 14px;text-align:center;cursor:pointer;position:relative;overflow:hidden;background:rgba(0,245,255,0.02)}
+.asset-box:active{border-color:var(--c)}
+.asset-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.asset-box img{width:60px;height:60px;object-fit:contain;margin:0 auto 8px;display:none;border-radius:8px}
+.asset-ico{font-size:28px;margin-bottom:8px}
+.asset-lbl{font-size:11px;color:rgba(232,240,255,0.4);letter-spacing:1.5px;text-transform:uppercase}
+.launch-box{text-align:center;padding:20px}
+.launch-icon{font-size:64px;margin-bottom:20px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.launch-title{font-family:'Orbitron',monospace;font-size:18px;color:var(--c);margin-bottom:12px;letter-spacing:2px}
+.launch-sub{font-size:14px;color:rgba(232,240,255,0.5);line-height:1.7;margin-bottom:28px}
+.flist{text-align:left;margin-bottom:28px}
+.fi{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--b);font-size:13px;color:rgba(232,240,255,0.6)}
+.fi:last-child{border:none}
+.fdot{width:6px;height:6px;border-radius:50%;background:var(--c);flex-shrink:0}
+#world{position:fixed;inset:0;z-index:500;background:#000;display:none;width:100%;height:100%}
+#world.open{display:block;width:100vw;height:100vh}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;z-index:1}
+.hud{position:absolute;inset:0;pointer-events:none;z-index:15}
+.hud-top{display:flex;align-items:flex-start;justify-content:space-between;padding:52px 16px 16px;background:linear-gradient(180deg,rgba(0,0,0,0.7) 0%,transparent 100%);pointer-events:all}
+.hud-title{font-family:'Orbitron',monospace;font-size:12px;color:var(--c);letter-spacing:2px;padding:6px 12px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);border:1px solid var(--b);border-radius:8px}
+.hud-btns{display:flex;gap:8px}
+.hbtn{background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid var(--b);border-radius:10px;color:var(--c);padding:8px 14px;cursor:pointer;font-size:11px;font-family:'Orbitron',monospace;pointer-events:all}
+.hbtn:active{background:rgba(0,245,255,0.15)}
+.hbtn.exit{color:#ff5555;border-color:rgba(255,85,85,0.25)}
+.xhair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;pointer-events:none}
+.xhair::before,.xhair::after{content:'';position:absolute;background:rgba(0,245,255,0.8);border-radius:1px}
+.xhair::before{width:20px;height:1px;top:50%;left:0;transform:translateY(-50%)}
+.xhair::after{width:1px;height:20px;left:50%;top:0;transform:translateX(-50%)}
+.sprites{position:absolute;bottom:175px;left:0;right:0;display:flex;align-items:flex-end;justify-content:center;gap:16px;pointer-events:none}
+.sprite{max-height:140px;max-width:90px;object-fit:contain;display:none;filter:drop-shadow(0 8px 20px rgba(0,245,255,0.5));animation:float 3s ease-in-out infinite}
+.efx-bar{position:absolute;bottom:210px;left:12px;right:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;pointer-events:all}
+.efx-btn{background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid var(--b);border-radius:20px;color:rgba(232,240,255,0.6);padding:6px 14px;cursor:pointer;font-size:11px;pointer-events:all}
+.efx-btn.on{border-color:var(--c);color:var(--c);background:rgba(0,245,255,0.12)}
+.prompt-row{position:absolute;bottom:165px;left:12px;right:12px;display:flex;gap:8px;pointer-events:all}
+.prompt-in{flex:1;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);border:1px solid var(--b);border-radius:12px;padding:11px 14px;color:#e8f0ff;font-family:'Inter',sans-serif;font-size:14px;outline:none}
+.prompt-in:focus{border-color:rgba(0,245,255,0.4)}
+.prompt-in::placeholder{color:rgba(232,240,255,0.25)}
+.prompt-go{background:var(--c);border:none;border-radius:12px;color:#000;padding:11px 16px;cursor:pointer;font-size:16px;font-weight:700}
+.ctrl{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 28px;background:linear-gradient(0deg,rgba(0,0,0,0.85) 0%,transparent 100%);display:flex;align-items:flex-end;justify-content:space-between;pointer-events:all;z-index:100}
+.dpad{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:4px}
+.dp{background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid var(--b);border-radius:12px;color:var(--c);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;-webkit-user-select:none;user-select:none}
+.dp:active{background:rgba(0,245,255,0.25)}
+.dp-blank{pointer-events:none}
+.ctrl-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.apk-btn{background:linear-gradient(135deg,var(--c),var(--p));border:none;border-radius:12px;color:#000;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;padding:12px 16px;cursor:pointer;letter-spacing:1px}
+.nov{position:absolute;inset:0;background:rgba(0,0,15,0.7);pointer-events:none;display:none;z-index:5}
+.nov.on{display:block}
+.fov{position:absolute;inset:0;pointer-events:none;display:none;z-index:5;background:radial-gradient(ellipse at center,transparent 15%,rgba(180,210,255,0.4) 100%);animation:fogp 8s ease-in-out infinite}
+@keyframes fogp{0%,100%{opacity:.3}50%{opacity:.7}}
+.fov.on{display:block}
+.sov{position:absolute;inset:0;pointer-events:none;display:none;z-index:5;background:linear-gradient(180deg,rgba(255,120,0,0.35) 0%,transparent 50%)}
+.sov.on{display:block}
+.pts{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:6}
+.pt{position:absolute;animation:pfall linear infinite}
+@keyframes pfall{0%{transform:translateY(-20px) translateX(0);opacity:1}100%{transform:translateY(110vh) translateX(var(--dx,0px));opacity:0}}
+.loader{position:fixed;inset:0;background:var(--d);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center}
+.loader.on{display:flex}
+.ll{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:32px;animation:glow 2s ease-in-out infinite}
+.lbar{width:180px;height:2px;background:var(--b);border-radius:1px;overflow:hidden;margin-bottom:16px}
+.lfill{height:100%;background:linear-gradient(90deg,var(--c),var(--p));animation:lf 2s ease-in-out infinite}
+@keyframes lf{0%{width:0%}100%{width:100%}}
+.ltxt{font-size:11px;color:rgba(232,240,255,0.4);letter-spacing:3px;text-transform:uppercase}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(13,24,37,0.95);backdrop-filter:blur(16px);border:1px solid rgba(0,245,255,0.3);border-radius:12px;padding:12px 24px;color:var(--c);font-size:13px;font-weight:500;z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.toast.on{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="ll">VISION9</div><div class="lbar"><div class="lfill"></div></div><div class="ltxt" id="ltxt">Generating Universe...</div></div>
+<div class="toast" id="toast"></div>
+<div class="screen active" id="landing">
+  <div class="logo">VISION9</div>
+  <div class="tag">Your Universe, One Image Away</div>
+  <p class="hero">What studios spend <b>billions</b> to build,<br>Vision9 creates in <em>seconds</em>.<br>Upload photos. Walk inside. Own it.</p>
+  <button class="btn-main" onclick="go('auth','signup')">CREATE YOUR UNIVERSE</button>
+  <button class="btn-out" onclick="go('auth','login')">SIGN IN</button>
+  <div class="stats">
+    <div class="stat"><div class="sn" id="sw">0</div><div class="sl">Worlds</div></div>
+    <div class="stat"><div class="sn">∞</div><div class="sl">Possibilities</div></div>
+    <div class="stat"><div class="sn">&lt;3s</div><div class="sl">Generation</div></div>
+  </div>
+</div>
+<div class="screen" id="auth">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px">
+    <div class="card">
+      <div class="card-title" id="at">CREATE ACCOUNT</div>
+      <div class="field" id="ng"><label>Username</label><input type="text" id="an" placeholder="Choose a username" autocomplete="off"></div>
+      <div class="field"><label>Email</label><input type="email" id="ae" placeholder="your@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="ap" placeholder="••••••••"></div>
+      <button class="btn-main" onclick="doAuth()">ENTER</button>
+      <div class="sw"><span id="ast">Already have an account?</span> <a onclick="tauth()" id="asl">Sign In</a></div>
+      <div class="back-link" onclick="go('landing')">← Back</div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">V9</div>
+    <div class="topbar-right">
+      <div class="topbar-name" id="uname"></div>
+      <div class="avatar" id="av" onclick="logout()">?</div>
+    </div>
+  </div>
+  <div class="dbody">
+    <div class="sec">Create New</div>
+    <div class="new-btn" onclick="go('create')"><div class="new-icon">🌌</div><div class="new-label">+ New Universe</div></div>
+    <div class="sec">My Worlds</div>
+    <div class="wgrid" id="wgrid"><div class="empty"><div style="font-size:48px;margin-bottom:14px">🪐</div><div style="font-size:13px;line-height:1.8">No worlds yet.<br>Create your first universe.</div></div></div>
+  </div>
+</div>
+<div class="screen" id="create">
+  <div class="create-top">
+    <button class="back" onclick="go('dashboard')">←</button>
+    <div class="step-label" id="slbl">STEP 1 — UPLOAD IMAGES</div>
+  </div>
+  <div class="cbody">
+    <div class="progress"><div class="prog a" id="p1"></div><div class="prog" id="p2"></div><div class="prog" id="p3"></div></div>
+    <div id="cs1">
+      <div class="upload-zone">
+        <input type="file" accept="image/*" multiple id="imgIn" onchange="onImgs(event)">
+        <div class="uz-icon">🖼️</div>
+        <div class="uz-title">UPLOAD IMAGES</div>
+        <div class="uz-sub">Select 1–6 photos from different angles.<br>Each becomes a wall of your 3D world.</div>
+      </div>
+      <div class="prev-grid" id="prevGrid"></div>
+      <div class="img-count" id="imgCount"></div>
+      <input type="text" class="text-input" id="wname" placeholder="Name your world..." maxlength="30">
+      <button class="btn-main" id="s1next" onclick="gostep(2)" style="display:none">NEXT →</button>
+    </div>
+    <div id="cs2" style="display:none">
+      <p style="font-size:13px;color:rgba(232,240,255,0.5);margin-bottom:20px;line-height:1.7">Add a character and weapon (optional).</p>
+      <div class="asset-grid">
+        <div class="asset-box"><input type="file" accept="image/*" id="charIn" onchange="onAsset('c',event)"><img id="cprev"><div class="asset-ico" id="cico">🧑</div><div class="asset-lbl">Character</div></div>
+        <div class="asset-box"><input type="file" accept="image/*" id="weapIn" onchange="onAsset('w',event)"><img id="wprev"><div class="asset-ico" id="wico">⚔️</div><div class="asset-lbl">Weapon</div></div>
+      </div>
+      <button class="btn-main" onclick="gostep(3)">NEXT →</button>
+      <button class="btn-out" onclick="gostep(1)" style="margin-top:10px">← Back</button>
+    </div>
+    <div id="cs3" style="display:none">
+      <div class="launch-box">
+        <div class="launch-icon">🚀</div>
+        <div class="launch-title">READY TO LAUNCH</div>
+        <div class="launch-sub">Your universe will be built with smooth 3D depth.</div>
+        
